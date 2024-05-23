@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/aws/aws-lambda-go/lambda"
+	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"
 	"github.com/gin-gonic/gin"
 	"github.com/peterouob/devops_golang/database"
 	"github.com/peterouob/devops_golang/router"
@@ -15,5 +17,7 @@ func main() {
 		}
 	}()
 	router.HandleRouter(r)
+	ginLambda := ginadapter.New(r)
+	lambda.Start(ginLambda.Proxy)
 	r.Run(":80")
 }
