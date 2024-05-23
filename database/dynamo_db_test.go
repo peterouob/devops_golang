@@ -10,7 +10,8 @@ import (
 
 func TestDynamoDBConnectionAndCreateTable(t *testing.T) {
 	sess, err := session.NewSession(&aws.Config{
-		Region: aws.String("us-east-1"),
+		Region:   aws.String("us-east-1"),
+		Endpoint: aws.String("localhost:8000"),
 	})
 	assert.Nil(t, err)
 	DB := dynamodb.New(sess)

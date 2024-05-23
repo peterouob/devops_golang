@@ -79,7 +79,63 @@ func Create(c *gin.Context) {
 }
 
 func Update(c *gin.Context) {
+	id := c.Param("id")
+	var user model.User
+	if err := c.BindJSON(&user); err != nil {
+		c.JSON(http.StatusBadGateway, gin.H{
+			"err :": err.Error(),
+			"code":  -1,
+		})
+		return
+	}
+	update := map[string]*dynamodb.AttributeValueUpdate{
+		"username": {
+			Action: aws.String("PUT"),
+			Value:  &dynamodb.AttributeValue{S: aws.String(user.Username)},
+		},
+		"password": {
+			Action: aws.String("PUT"),
+			Value:  &dynamodb.AttributeValue{S: aws.String(user.Password)},
+		},
+	}
+	updateItem := &dynamodb.UpdateItemInput{
+		TableName: aws.String(database.TableName),
+		Key: map[string]*dynamodb.AttributeValue{
+			"ID": {S: aws.String(id)},
+		},
+		AttributeUpdates: update,
+	}
+	if _, err := database.DB.UpdateItem(updateItem); err != nil {
+		c.JSON(http.StatusBadGateway, gin.H{
+			"err :": err.Error(),
+			"code":  -1,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"msg":  "success",
+		"code": 0,
+	})
 }
 
 func Delete(c *gin.Context) {
+	id := c.Param("id")
+	deleteInput := &dynamodb.DeleteItemInput{
+		TableName: aws.String(database.TableName),
+		Key: map[string]*dynamodb.AttributeValue{
+			"ID": {S: aws.String(id)},
+		},
+	}
+	if _, err := database.DB.DeleteItem(deleteInput); err != nil {
+		c.JSON(http.StatusBadGateway, gin.H{
+			"err :": err.Error(),
+			"code":  -1,
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"msg":  "success",
+		"code": 0,
+	})
 }

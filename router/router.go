@@ -9,6 +9,6 @@ func HandleRouter(r *gin.Engine) {
 	r.GET("/", services.GetAll)
 	r.GET("/:id", services.GetByID)
 	r.POST("/create", services.Create)
-	r.POST("/update/:id", services.Update)
-	r.POST("/delete/:id", services.Delete)
+	r.PUT("/update/:id", services.Update)
+	r.DELETE("/delete/:id", services.Delete)
 }
