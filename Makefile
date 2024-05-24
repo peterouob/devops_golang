@@ -36,6 +36,7 @@ clean:
 
 .PHONY:
 	all
+	env
 	deps
 	build
 	test
