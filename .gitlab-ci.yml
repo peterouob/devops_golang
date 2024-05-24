@@ -1,4 +1,5 @@
 stages:
+  - env
   - deps
   - test
   - build
