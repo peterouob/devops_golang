@@ -3,15 +3,14 @@ ZIP_NAME=${BINARY_NAME}.zip
 
 all: build
 
-env:
-	@echo "go mod"
-	go env -w GO111MODULE=auto
-	go mod init devops_go
-
-deps: env
-	@echo "go get deps"
+deps:
+	@echo "Running go mod tidy"
 	go mod tidy
-	go mod vendor
+
+env:
+	@echo "Setting up Go environment"
+	@if [ ! -f go.mod ]; then go mod init devops_go; fi
+	go env -w GO111MODULE=auto
 
 test: deps
 	@echo "testing ..."

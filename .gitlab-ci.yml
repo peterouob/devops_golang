@@ -1,8 +1,8 @@
 image: golang:1.22.2
 
 stages:
-  - env
   - deps
+  - env
   - test
   - build
   - package
@@ -12,9 +12,8 @@ variables:
   BINARY_NAME: "main"
   ZIP_NAME: "main.zip"
 
-.default-before-script:
-  before_script:
-    - if [[ "$CI_RUNNER_EXECUTABLE_ARCH" == "linux/amd64" ]]; then
+before_script:
+  - if [[ "$CI_RUNNER_EXECUTABLE_ARCH" == "linux/amd64" ]]; then
       apt-get update && apt-get install -y zip;
       elif [[ "$CI_RUNNER_EXECUTABLE_ARCH" == "linux/arm64" ]]; then
       apt-get update && apt-get install -y zip;
@@ -24,39 +23,34 @@ variables:
       brew install zip;
       fi
 
-env:
-  stage: env
-  extends: .default-before-script
-  script:
-    - make env
 
 deps:
   stage: deps
-  extends: .default-before-script
   script:
     - make deps
 
+env:
+  stage: env
+  script:
+    - make env
+
 test:
   stage: test
-  extends: .default-before-script
   script:
     - make test
 
 build:
   stage: build
-  extends: .default-before-script
   script:
     - make build
 
 package:
   stage: package
-  extends: .default-before-script
   script:
     - make package
 
 docker-build:
   stage: docker-build
-  extends: .default-before-script
   script:
     - make docker-build
   only:
