@@ -5,10 +5,14 @@ import (
 	"github.com/peterouob/devops_golang/services"
 )
 
-func HandleRouter(r *gin.Engine) {
+func HandleRouter() *gin.Engine {
+	r := gin.New()
+	r.Use(gin.Logger())
+	r.Use(gin.Recovery())
 	r.GET("/", services.GetAll)
 	r.GET("/:id", services.GetByID)
 	r.POST("/create", services.Create)
 	r.PUT("/update/:id", services.Update)
 	r.DELETE("/delete/:id", services.Delete)
+	return r
 }

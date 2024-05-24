@@ -1,23 +1,24 @@
 package main
 
 import (
-	"github.com/aws/aws-lambda-go/lambda"
-	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"
-	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"github.com/peterouob/devops_golang/database"
 	"github.com/peterouob/devops_golang/router"
 	"log"
+	"net/http"
+	"os"
 )
 
 func main() {
-	r := gin.Default()
 	go func() {
 		if err := database.InitDynamoDB(); err != nil {
 			log.Println("Error to Init DB", err.Error())
 		}
 	}()
-	router.HandleRouter(r)
-	ginLambda := ginadapter.New(r)
-	lambda.Start(ginLambda.Proxy)
-	r.Run(":80")
+	if err := godotenv.Load(); err != nil {
+		log.Println("Error to load .env file:", err)
+	}
+	port := ":" + os.Getenv("PORT")
+	//log.Println(gateway.ListenAndServe(port, router.HandleRouter()))
+	log.Println(http.ListenAndServe(port, router.HandleRouter()))
 }

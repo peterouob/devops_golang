@@ -4,14 +4,21 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
+	"github.com/google/uuid"
+	"github.com/joho/godotenv"
 	"github.com/stretchr/testify/assert"
+	"log"
+	"os"
 	"testing"
 )
 
 func TestDynamoDBConnectionAndCreateTable(t *testing.T) {
+	if err := godotenv.Load(); err != nil {
+		log.Fatal("Error loading .env file :", err)
+	}
+
 	sess, err := session.NewSession(&aws.Config{
-		Region:   aws.String("us-east-1"),
-		Endpoint: aws.String("localhost:8000"),
+		Region: aws.String(os.Getenv("REGION")),
 	})
 	assert.Nil(t, err)
 	DB := dynamodb.New(sess)
@@ -22,9 +29,10 @@ func TestDynamoDBConnectionAndCreateTable(t *testing.T) {
 	assert.NotNil(t, output)
 	t.Log("Connected to DynamoDB, tables:", output.TableNames)
 
+	tableId := uuid.NewString()
 	// 创建表
 	input := &dynamodb.CreateTableInput{
-		TableName: aws.String("MyTestTable"),
+		TableName: aws.String(tableId),
 		AttributeDefinitions: []*dynamodb.AttributeDefinition{
 			{
 				AttributeName: aws.String("ID"),
@@ -38,19 +46,19 @@ func TestDynamoDBConnectionAndCreateTable(t *testing.T) {
 			},
 		},
 		ProvisionedThroughput: &dynamodb.ProvisionedThroughput{
-			ReadCapacityUnits:  aws.Int64(5),
-			WriteCapacityUnits: aws.Int64(5),
+			ReadCapacityUnits:  aws.Int64(1),
+			WriteCapacityUnits: aws.Int64(1),
 		},
 	}
 
 	_, err = DB.CreateTable(input)
 	assert.Nil(t, err)
-	t.Log("Created the table: MyTestTable")
+	t.Log("Created the table " + tableId)
 
 	// 清理，删除表
 	_, err = DB.DeleteTable(&dynamodb.DeleteTableInput{
-		TableName: aws.String("MyTestTable"),
+		TableName: aws.String(tableId),
 	})
 	assert.Nil(t, err)
-	t.Log("Deleted the table: MyTestTable")
+	t.Log("Deleted the table" + tableId)
 }

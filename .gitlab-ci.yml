@@ -1,0 +1,54 @@
+stages:
+  - deps
+  - test
+  - build
+  - package
+  - docker-build
+
+variables:
+  BINARY_NAME: "main"
+  ZIP_NAME: "main.zip"
+
+.default-before-script:
+  before_script:
+    - if [[ "$CI_RUNNER_EXECUTABLE_ARCH" == "linux/amd64" ]]; then
+      apt-get update && apt-get install -y zip;
+      elif [[ "$CI_RUNNER_EXECUTABLE_ARCH" == "linux/arm64" ]]; then
+      apt-get update && apt-get install -y zip;
+      elif [[ "$CI_RUNNER_EXECUTABLE_ARCH" == "darwin/amd64" ]]; then
+      brew install zip;
+      elif [[ "$CI_RUNNER_EXECUTABLE_ARCH" == "darwin/arm64" ]]; then
+      brew install zip;
+      fi
+
+deps:
+  stage: deps
+  extends: .default-before-script
+  script:
+    - make deps
+
+test:
+  stage: test
+  extends: .default-before-script
+  script:
+    - make test
+
+build:
+  stage: build
+  extends: .default-before-script
+  script:
+    - make build
+
+package:
+  stage: package
+  extends: .default-before-script
+  script:
+    - make package
+
+docker-build:
+  stage: docker-build
+  extends: .default-before-script
+  script:
+    - make docker-build
+  only:
+    - docker

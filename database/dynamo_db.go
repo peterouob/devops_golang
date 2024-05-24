@@ -4,7 +4,9 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
+	"github.com/joho/godotenv"
 	"log"
+	"os"
 )
 
 var DB *dynamodb.DynamoDB
@@ -12,8 +14,11 @@ var DB *dynamodb.DynamoDB
 const TableName = "user"
 
 func InitDynamoDB() error {
+	if err := godotenv.Load(); err != nil {
+		log.Fatal("Error loading .env file :", err)
+	}
 	sess, err := session.NewSession(&aws.Config{
-		Region: aws.String("us-east-1"),
+		Region: aws.String(os.Getenv("REGION")),
 	})
 	if err != nil {
 		return err
