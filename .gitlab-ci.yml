@@ -1,3 +1,5 @@
+image: golang:1.22.2
+
 stages:
   - env
   - deps
