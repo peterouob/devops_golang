@@ -21,6 +21,12 @@ variables:
       brew install zip;
       fi
 
+env:
+  stage: env
+  extends: .default-before-script
+  script:
+    - make env
+
 deps:
   stage: deps
   extends: .default-before-script
