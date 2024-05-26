@@ -4,8 +4,9 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/peterouob/devops_golang/database"
 	"github.com/peterouob/devops_golang/router"
-	"log"
 	"net/http"
+
+	"log"
 	"os"
 )
 

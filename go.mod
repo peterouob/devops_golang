@@ -4,7 +4,7 @@ go 1.22.2
 
 require (
 	github.com/apex/gateway v1.1.2
-	github.com/aws/aws-sdk-go v1.53.7
+	github.com/aws/aws-sdk-go v1.53.10
 	github.com/gin-gonic/gin v1.10.0
 	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1
@@ -12,7 +12,7 @@ require (
 )
 
 require (
-	github.com/aws/aws-lambda-go v1.41.0 // indirect
+	github.com/aws/aws-lambda-go v1.17.0 // indirect
 	github.com/bytedance/sonic v1.11.6 // indirect
 	github.com/bytedance/sonic/loader v0.1.1 // indirect
 	github.com/cloudwego/base64x v0.1.4 // indirect

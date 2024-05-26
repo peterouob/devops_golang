@@ -17,8 +17,9 @@ func InitDynamoDB() error {
 	if err := godotenv.Load(); err != nil {
 		log.Fatal("Error loading .env file :", err)
 	}
+	log.Println(os.Getenv("REGION"))
 	sess, err := session.NewSession(&aws.Config{
-		Region: aws.String(os.Getenv("REGION")),
+		Region: aws.String(os.Getenv("us-east-1")),
 	})
 	if err != nil {
 		return err
