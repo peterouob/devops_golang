@@ -26,7 +26,7 @@ deploy: build
 
 package: build
 	@echo "zip" $(BINARY_NAME)
-	zip $(ZIP_NAME) bin/$(BINARY_NAME)
+	zip $(ZIP_NAME) $(BINARY_NAME)
 
 docker-build:
 	@echo "Docker build"
