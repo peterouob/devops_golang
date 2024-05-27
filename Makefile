@@ -22,6 +22,12 @@ build: deps
 
 deploy: build
 	@echo "deploy ..."
+	apt-get update && apt-get install -y npm
+	echo "apt get success"
+	npm install -g serverless
+	@echo "npm install success"
+	serverless deploy --verbose
+	@echo "check serverless success"
 	serverless deploy --stage prod
 
 package: build
