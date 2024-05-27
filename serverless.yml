@@ -19,7 +19,7 @@ provider:
 
 functions:
   api:
-    handler: bin/main
+    handler: main
     events:
       - http:
           path: /
