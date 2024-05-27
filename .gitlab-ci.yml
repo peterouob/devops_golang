@@ -6,6 +6,7 @@ stages:
   - test
   - build
   - package
+  - deploy
   - docker-build
 
 variables:
@@ -48,6 +49,11 @@ package:
   stage: package
   script:
     - make package
+
+deploy:
+  stage: deploy
+  script:
+    - make deploy
 
 docker-build:
   stage: docker-build

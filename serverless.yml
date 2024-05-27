@@ -2,16 +2,42 @@ service: serverless-rest-api
 frameworkVersion: '>=1.28'
 provider:
   name: aws
-  runtime: provided.al2023
+  runtime: provided.al2
   region: us-east-1
+  iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:ListTables
+          - dynamodb:DescribeTable
+          - dynamodb:Query
+          - dynamodb:Scan
+          - dynamodb:GetItem
+          - dynamodb:PutItem
+          - dynamodb:UpdateItem
+          - dynamodb:DeleteItem
+        Resource: arn:aws:dynamodb:us-east-1:505020742549:table/user
+
 functions:
   api:
     handler: bin/main
     events:
       - http:
           path: /
-          method: GET
+          method: get
+      - http:
+          path: /{id}
+          method: get
+      - http:
+          path: /create
+          method: post
+      - http:
+          path: /update/{id}
+          method: put
+      - http:
+          path: /delete/{id}
+          method: delete
 package:
   patterns:
     - '!/**' #排除
-    - bin/main
+    - main
+    - bootstrap

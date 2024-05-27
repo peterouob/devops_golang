@@ -18,9 +18,9 @@ test: deps
 
 build: deps
 	@echo "build" $(BINARY_NAME)
-	GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o bin/${BINARY_NAME} main.go
+	GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o ${BINARY_NAME} main.go
 
-deploy_prod: build
+deploy: build
 	@echo "deploy ..."
 	serverless deploy --stage prod
 
@@ -45,3 +45,4 @@ clean:
 	test
 	docker-build
 	clean
+	deploy
